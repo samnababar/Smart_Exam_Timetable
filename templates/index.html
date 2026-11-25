@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard | Smart Exam Timetable{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card success">
+        <div class="stat-icon">📚</div>
+        <div>
+            <p>Total Subjects</p>
+            <h3>{{ subjects|length }}</h3>
+        </div>
+    </div>
+    <div class="stat-card primary">
+        <div class="stat-icon">🎓</div>
+        <div>
+            <p>Total Students</p>
+            <h3>{{ students|length }}</h3>
+        </div>
+    </div>
+    <div class="stat-card warning">
+        <div class="stat-icon">⚠️</div>
+        <div>
+            <p>Conflicts Found</p>
+            <h3>{{ conflict_count }}</h3>
+        </div>
+    </div>
+    <div class="stat-card accent">
+        <div class="stat-icon">🕒</div>
+        <div>
+            <p>Generated Slots</p>
+            <h3>{{ used_slots }}</h3>
+        </div>
+    </div>
+</div>
+
+<div class="content-grid two-col">
+    <section class="panel">
+        <div class="panel-header">
+            <h3>Subject Overview</h3>
+            <a class="text-link" href="{{ url_for('subjects_page') }}">Manage</a>
+        </div>
+        <div class="list-stack">
+            {% for subject in subjects[:5] %}
+            <div class="mini-item">
+                <div>
+                    <strong>{{ subject.code }}</strong>
+                    <small>{{ subject.name }}</small>
+                </div>
+                <span class="badge">{{ subject.student_count or 0 }} students</span>
+            </div>
+            {% else %}
+            <p class="empty-state">No subjects added yet.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-header">
+            <h3>Student Overview</h3>
+            <a class="text-link" href="{{ url_for('students_page') }}">Manage</a>
+        </div>
+        <div class="list-stack">
+            {% for student in students[:5] %}
+            <div class="mini-item">
+                <div>
+                    <strong>{{ student.name }}</strong>
+                    <small>{{ student.student_id }}</small>
+                </div>
+                <span class="badge soft">{{ student.enrolled_subjects or 0 }} courses</span>
+            </div>
+            {% else %}
+            <p class="empty-state">No students added yet.</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<section class="panel full-width">
+    <div class="panel-header">
+        <h3>Latest Generated Timetable</h3>
+        <a class="text-link" href="{{ url_for('timetable_page') }}">View full schedule</a>
+    </div>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject Code</th>
+                    <th>Subject Name</th>
+                    <th>Department</th>
+                    <th>Exam Slot</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in timetable[:8] %}
+                <tr>
+                    <td>{{ item.subject_code }}</td>
+                    <td>{{ item.subject_name }}</td>
+                    <td>{{ item.department }}</td>
+                    <td>{{ item.slot_name }}</td>
+                    <td>{{ item.slot_index + 1 }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="empty-state">No timetable has been generated yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

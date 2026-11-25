@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}Subjects | Smart Exam Timetable{% endblock %}
+{% block page_title %}Subjects{% endblock %}
+
+{% block content %}
+<div class="form-grid two-col subjects-layout">
+    <section class="panel">
+        <div class="panel-header">
+            <h3 id="subject-form-heading">Add Subject</h3>
+        </div>
+        <form action="{{ url_for('subjects_page') }}" method="post" class="form-body" id="subject-form">
+            <input type="hidden" name="action" value="add" id="subject-action">
+            <input type="hidden" name="subject_id" id="subject_id">
+            <div class="field">
+                <label for="subject_code">Subject Code</label>
+                <input type="text" id="subject_code" name="code" placeholder="e.g. CSC-201" required>
+            </div>
+            <div class="field">
+                <label for="subject_name">Subject Name</label>
+                <input type="text" id="subject_name" name="name" placeholder="Discrete Structures" required>
+            </div>
+            <div class="field">
+                <label for="subject_department">Department</label>
+                <input type="text" id="subject_department" name="department" placeholder="Computer Science" required>
+            </div>
+            <div class="field">
+                <label for="subject_semester">Semester</label>
+                <input type="number" id="subject_semester" name="semester" min="1" max="12" required>
+            </div>
+            <div class="button-row">
+                <button type="submit" class="btn primary-btn">Save Subject</button>
+                <button type="button" class="btn secondary-btn" id="cancel-subject-edit">Cancel</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="panel">
+        <div class="panel-header">
+            <h3>Subject List</h3>
+        </div>
+        <div class="table-wrapper">
+            <table class="data-table subjects-table">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Semester</th>
+                        <th>Students</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subject in subjects %}
+                    <tr>
+                        <td class="subject-code">{{ subject.code }}</td>
+                        <td>{{ subject.name }}</td>
+                        <td>{{ subject.department }}</td>
+                        <td>{{ subject.semester }}</td>
+                        <td>{{ subject.student_count or 0 }}</td>
+                        <td>
+                            <div class="inline-actions">
+                                <button type="button" class="btn link-btn edit-subject-btn" data-id="{{ subject.id }}" data-code="{{ subject.code }}" data-name="{{ subject.name }}" data-department="{{ subject.department }}" data-semester="{{ subject.semester }}">Edit</button>
+                                <form action="{{ url_for('subjects_page') }}" method="post" class="inline-form">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="subject_id" value="{{ subject.id }}">
+                                    <button type="submit" class="btn danger-btn" onclick="return confirm('Delete this subject?')">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="empty-state">No subjects registered yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}

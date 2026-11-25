@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Timetable | Smart Exam Timetable{% endblock %}
+{% block page_title %}Exam Timetable{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="panel-header">
+        <h3>Generated Schedule</h3>
+        <div class="button-row">
+            <button type="button" class="btn secondary-btn" onclick="window.print()">Print</button>
+            <a class="btn primary-btn" href="{{ url_for('timetable_download') }}">Download CSV</a>
+        </div>
+    </div>
+
+    <div class="table-wrapper timetable-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Slot</th>
+                    <th>Time</th>
+                    <th>Subject Code</th>
+                    <th>Subject Name</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if timetable %}
+                    {% for item in timetable %}
+                    <tr>
+                        <td>{{ item.slot_name }}</td>
+                        <td>{{ item.slot_name }}</td>
+                        <td>{{ item.subject_code }}</td>
+                        <td>{{ item.subject_name }}</td>
+                        <td>{{ item.department }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="empty-state">No timetable available. Generate one from the dashboard.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

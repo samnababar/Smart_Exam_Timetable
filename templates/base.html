@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart Exam Timetable{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand-box">
+                <div class="brand-icon">SE</div>
+                <div>
+                    <h2>Smart Exam</h2>
+                    <small>Timetable System</small>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                    <span>🏠</span> Dashboard
+                </a>
+                <a href="{{ url_for('subjects_page') }}" class="nav-link {% if request.endpoint == 'subjects_page' %}active{% endif %}">
+                    <span>📚</span> Subjects
+                </a>
+                <a href="{{ url_for('students_page') }}" class="nav-link {% if request.endpoint == 'students_page' %}active{% endif %}">
+                    <span>🎓</span> Students
+                </a>
+                <a href="{{ url_for('enrollments_page') }}" class="nav-link {% if request.endpoint == 'enrollments_page' %}active{% endif %}">
+                    <span>📝</span> Enrollment
+                </a>
+                <a href="{{ url_for('graph_page') }}" class="nav-link {% if request.endpoint == 'graph_page' %}active{% endif %}">
+                    <span>📊</span> Conflict Graph
+                </a>
+                <a href="{{ url_for('timetable_page') }}" class="nav-link {% if request.endpoint == 'timetable_page' %}active{% endif %}">
+                    <span>🗓️</span> Timetable
+                </a>
+                <a href="{{ url_for('reports_page') }}" class="nav-link {% if request.endpoint == 'reports_page' %}active{% endif %}">
+                    <span>📈</span> Reports
+                </a>
+                <a href="{{ url_for('settings_page') }}" class="nav-link {% if request.endpoint == 'settings_page' %}active{% endif %}">
+                    <span>⚙️</span> Settings
+                </a>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">University Management</p>
+                    <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+                </div>
+                <div class="topbar-actions">
+                    <form action="{{ url_for('generate_timetable_route') }}" method="post">
+                        <button type="submit" class="btn primary-btn">Generate Timetable</button>
+                    </form>
+                </div>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-stack">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

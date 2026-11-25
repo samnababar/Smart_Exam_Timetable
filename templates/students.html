@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Students | Smart Exam Timetable{% endblock %}
+{% block page_title %}Students{% endblock %}
+
+{% block content %}
+<div class="form-grid two-col students-layout">
+    <section class="panel">
+        <div class="panel-header">
+            <h3>Add Student</h3>
+        </div>
+        <form action="{{ url_for('students_page') }}" method="post" class="form-body" id="student-form">
+            <input type="hidden" name="action" value="add" id="student-action">
+            <input type="hidden" name="db_student_id" id="student_db_id">
+            <div class="field">
+                <label for="student_code">Student ID</label>
+                <input type="text" id="student_code" name="student_code" placeholder="2024-CS-001" required>
+            </div>
+            <div class="field">
+                <label for="student_name">Student Name</label>
+                <input type="text" id="student_name" name="name" placeholder="Ayesha Khan" required>
+            </div>
+            <div class="field">
+                <label for="student_program">Program</label>
+                <input type="text" id="student_program" name="program" placeholder="Computer Science" required>
+            </div>
+            <div class="field">
+                <label for="student_year">Year</label>
+                <input type="number" id="student_year" name="year" min="1" max="8" required>
+            </div>
+            <div class="field">
+                <label for="student_email">Email</label>
+                <input type="email" id="student_email" name="email" placeholder="student@example.com">
+            </div>
+            <div class="button-row">
+                <button type="submit" class="btn primary-btn">Save Student</button>
+                <button type="button" class="btn secondary-btn" id="cancel-student-edit">Cancel</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="panel">
+        <div class="panel-header">
+            <h3>Student List</h3>
+        </div>
+        <div class="table-wrapper">
+            <table class="data-table students-table">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Program</th>
+                        <th>Year</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td class="student-id">{{ student.student_id }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.program }}</td>
+                        <td>{{ student.year }}</td>
+                        <td class="student-email">{{ student.email or '—' }}</td>
+                        <td>
+                            <div class="inline-actions">
+                                <button type="button" class="btn link-btn edit-student-btn" data-id="{{ student.id }}" data-student-id="{{ student.student_id }}" data-name="{{ student.name }}" data-program="{{ student.program }}" data-year="{{ student.year }}" data-email="{{ student.email or '' }}">Edit</button>
+                                <form action="{{ url_for('students_page') }}" method="post" class="inline-form">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="student_id" value="{{ student.id }}">
+                                    <button type="submit" class="btn danger-btn" onclick="return confirm('Delete this student?')">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="empty-state">No students registered yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Settings | Smart Exam Timetable{% endblock %}
+{% block page_title %}Settings{% endblock %}
+
+{% block content %}
+<section class="panel settings-panel">
+    <div class="panel-header">
+        <h3>General Settings</h3>
+    </div>
+    <form action="{{ url_for('settings_page') }}" method="post" class="form-body settings-form">
+        <div class="field">
+            <label for="school_name">School Name</label>
+            <input type="text" id="school_name" name="school_name" value="{{ settings.get('school_name', 'Smart Exam Timetable') }}">
+        </div>
+        <div class="field">
+            <label for="slot_prefix">Slot Prefix</label>
+            <input type="text" id="slot_prefix" name="slot_prefix" value="{{ settings.get('slot_prefix', 'Exam Slot') }}">
+        </div>
+        <div class="field">
+            <label for="slot_count">Number of Slots</label>
+            <input type="number" id="slot_count" name="slot_count" value="{{ settings.get('slot_count', '6') }}" min="1" max="20">
+        </div>
+        <div class="field">
+            <label for="slot_start_time">Start Time</label>
+            <input type="time" id="slot_start_time" name="slot_start_time" value="{{ settings.get('slot_start_time', '09:00') }}">
+        </div>
+        <div class="field">
+            <label for="slot_duration_minutes">Slot Duration (Minutes)</label>
+            <input type="number" id="slot_duration_minutes" name="slot_duration_minutes" value="{{ settings.get('slot_duration_minutes', '120') }}" min="30" max="240">
+        </div>
+        <div class="field">
+            <label for="exam_day">Exam Day</label>
+            <input type="text" id="exam_day" name="exam_day" value="{{ settings.get('exam_day', 'Monday') }}">
+        </div>
+        <div class="button-row">
+            <button type="submit" class="btn primary-btn">Save Settings</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

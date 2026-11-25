@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Conflict Graph | Smart Exam Timetable{% endblock %}
+{% block page_title %}Conflict Graph{% endblock %}
+
+{% block content %}
+<section class="panel graph-panel">
+    <div class="panel-header">
+        <h3>Graph Coloring Visualization</h3>
+    </div>
+    <svg viewBox="0 0 720 520" class="graph-svg" aria-label="Conflict graph">
+        {% for edge in graph_data.edges %}
+        <line x1="{{ edge.source_x }}" y1="{{ edge.source_y }}" x2="{{ edge.target_x }}" y2="{{ edge.target_y }}" class="graph-edge"></line>
+        {% endfor %}
+
+        {% for node in graph_data.nodes %}
+        <g>
+            <circle cx="{{ node.x }}" cy="{{ node.y }}" r="32" class="graph-node color-{{ node.color }}"></circle>
+            <text x="{{ node.x }}" y="{{ node.y + 5 }}" text-anchor="middle" class="graph-label">{{ node.label }}</text>
+        </g>
+        {% endfor %}
+    </svg>
+</section>
+
+<section class="panel full-width">
+    <div class="panel-header">
+        <h3>Color Coding</h3>
+    </div>
+    <div class="legend-grid">
+        {% for subject in subjects %}
+        <div class="legend-item">
+            <span class="dot color-{{ assignments[subject.id] }}"></span>
+            <span>{{ subject.code }} : Slot {{ assignments[subject.id] + 1 }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

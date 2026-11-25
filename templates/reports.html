@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}Reports | Smart Exam Timetable{% endblock %}
+{% block page_title %}Reports{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card primary">
+        <div class="stat-icon">📚</div>
+        <div>
+            <p>Subjects</p>
+            <h3>{{ subjects|length }}</h3>
+        </div>
+    </div>
+    <div class="stat-card success">
+        <div class="stat-icon">🎓</div>
+        <div>
+            <p>Students</p>
+            <h3>{{ students|length }}</h3>
+        </div>
+    </div>
+    <div class="stat-card warning">
+        <div class="stat-icon">⚠️</div>
+        <div>
+            <p>Conflicts</p>
+            <h3>{{ conflict_pairs|length }}</h3>
+        </div>
+    </div>
+</div>
+
+<section class="panel">
+    <div class="panel-header">
+        <h3>Conflict Pairs</h3>
+    </div>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject A</th>
+                    <th>Subject B</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pair in conflict_pairs %}
+                <tr>
+                    <td>{{ pair[0] }}</td>
+                    <td>{{ pair[1] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="2" class="empty-state">No conflicts found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="panel full-width">
+    <div class="panel-header">
+        <h3>Timetable Summary</h3>
+    </div>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Slot</th>
+                    <th>Subject Code</th>
+                    <th>Subject Name</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in timetable %}
+                <tr>
+                    <td>{{ item.slot_name }}</td>
+                    <td>{{ item.subject_code }}</td>
+                    <td>{{ item.subject_name }}</td>
+                    <td>{{ item.department }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="empty-state">No timetable generated yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
