@@ -1,2 +1,9 @@
+[project]
+name = "smart-exam-timetable"
+version = "0.1.0"
+dependencies = [
+    "Flask==3.0.3",
+]
+
 [tool.vercel]
 entrypoint = "app:app"
