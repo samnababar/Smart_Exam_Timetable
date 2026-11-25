@@ -1,12 +1,27 @@
 import json
+import os
+import shutil
 import sqlite3
+import tempfile
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DB_PATH = BASE_DIR / "database" / "smart_exam.db"
+LOCAL_DB_PATH = BASE_DIR / "database" / "smart_exam.db"
+configured_db_path = os.environ.get("SMART_EXAM_DB_PATH")
+
+if configured_db_path:
+    DB_PATH = Path(configured_db_path)
+elif os.environ.get("VERCEL"):
+    DB_PATH = Path(tempfile.gettempdir()) / "smart_exam.db"
+    if LOCAL_DB_PATH.is_file() and not DB_PATH.exists():
+        DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(LOCAL_DB_PATH, DB_PATH)
+else:
+    DB_PATH = LOCAL_DB_PATH
 
 
 def get_connection():
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn

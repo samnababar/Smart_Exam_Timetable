@@ -18,7 +18,10 @@ A Flask-based web application that generates a conflict-free university exam tim
 
 ```text
 Smart_Exam_Timetable/
+├── .vercelignore
 ├── app.py
+├── main.py
+├── pyproject.toml
 ├── requirements.txt
 ├── README.md
 ├── algorithm/
@@ -27,15 +30,16 @@ Smart_Exam_Timetable/
 │   └── coloring.py
 ├── database/
 │   ├── __init__.py
-│   └── db.py
-├── static/
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       └── app.js
+│   ├── db.py
+│   └── smart_exam.db
+├── public/
+│   └── static/
+│       ├── css/
+│       │   └── style.css
+│       └── js/
+│           └── app.js
 ├── templates/
 │   ├── base.html
-│   ├── dashboard.html
 │   ├── index.html
 │   ├── subjects.html
 │   ├── students.html
@@ -77,3 +81,17 @@ Smart_Exam_Timetable/
 - The application stores data in SQLite.
 - Sample subjects and students are added automatically on first run.
 - Use the dashboard to generate the exam timetable after adding subjects and enrollments.
+
+## Deploying to Vercel
+
+- `pyproject.toml` explicitly points Vercel to the Flask instance in `app.py`.
+- Static files are in `public/static/`, served from `/static/` both locally and on Vercel.
+- Vercel's function filesystem is not durable. The app copies the bundled SQLite
+  database to `/tmp/smart_exam.db` on a cold start and writes there; changes can
+  disappear when the function instance is recycled and are not shared across
+  instances. Use a managed database for durable, multi-instance production data.
+- Set `SMART_EXAM_DB_PATH` to use a different writable SQLite path where the
+  runtime provides persistent storage.
+
+Deploy from the project root using Vercel's Python/Flask preset. No custom build
+command is required.

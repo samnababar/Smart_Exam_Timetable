@@ -29,7 +29,7 @@ from database.db import (
     update_subject,
 )
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="public/static", static_url_path="/static")
 app.secret_key = "smart-exam-timetable-generator-secret-key"
 
 
